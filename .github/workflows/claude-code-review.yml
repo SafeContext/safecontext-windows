@@ -33,16 +33,10 @@ on:
 
 jobs:
   review:
-    if: >-
-      (
-        github.event_name == 'pull_request' &&
-        github.event.pull_request.user.login == 'joethompson1'
-      ) || (
-        github.event_name == 'issue_comment' &&
-        github.event.issue.pull_request &&
-        github.event.comment.user.login == 'joethompson1' &&
-        contains(github.event.comment.body, '@claude review')
-      )
+    # Windows downstream uses native Codex review (issue #3), configured in the
+    # owner's Codex settings. Keep this inherited, account-specific job disabled
+    # even when ordinary CI is enabled. Do not add upstream reviewer credentials.
+    if: ${{ false }}
     # Concurrency is on the JOB, not the workflow: every PR comment (incl. Claude's own progress
     # comment) starts a workflow run, and a workflow-level group let those skipped runs cancel a
     # real review. Job-level concurrency only applies to runs that pass the `if` above.
